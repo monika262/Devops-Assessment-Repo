@@ -1,0 +1,7 @@
+- name: Setup Yii2 App on EC2
+  hosts: swarm
+  become: true
+  roles:
+    - docker
+    - nginx
+    - app_deploy

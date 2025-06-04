@@ -1,0 +1,25 @@
+- name: Create app directory
+  file:
+    path: /opt/yii2
+    state: directory
+
+- name: Clone Yii2 app
+  git:
+    repo: https://github.com/yiisoft/yii2-app-basic.git
+    dest: /opt/yii2
+    force: yes
+
+- name: Copy Dockerfile
+  template:
+    src: Dockerfile.j2
+    dest: /opt/yii2/Dockerfile
+
+- name: Copy docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/yii2/docker-compose.yml
+
+- name: Deploy app with Docker Swarm
+  shell: |
+    cd /opt/yii2
+    docker stack deploy -c docker-compose.yml yii2app

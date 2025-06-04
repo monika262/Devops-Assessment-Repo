@@ -1,0 +1,28 @@
+- name: Install required packages
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+    update_cache: yes
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker repo
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+
+- name: Install Docker & Docker Compose
+  apt:
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose']
+    update_cache: yes
+
+- name: Enable and start Docker
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Initialize Docker Swarm
+  shell: docker swarm init
+  ignore_errors: true
